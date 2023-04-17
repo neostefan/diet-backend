@@ -1,0 +1,29 @@
+name: CI/CD diet app backend
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout the repository
+              uses: actions/checkout@v3
+
+            - name: login to dockerhub
+              env:
+                USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+                PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+              run: docker login --username $USERNAME --password $PASSWORD
+
+            - name: build and deploy the image to dockerhub
+              run: |
+                docker build -t neostefan/diet-backend:latest .
+                docker image push neostefan/diet-backend:latest
+
+
