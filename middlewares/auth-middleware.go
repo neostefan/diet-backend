@@ -13,7 +13,6 @@ func AuthMiddleware(ctx *gin.Context) {
 	var userId string
 
 	tokenString := strings.Split(ctx.Request.Header.Get("Authorization"), " ")[1]
-	fmt.Println(tokenString)
 
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -24,7 +23,6 @@ func AuthMiddleware(ctx *gin.Context) {
 	})
 
 	if err != nil {
-		fmt.Println("I am here o")
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
