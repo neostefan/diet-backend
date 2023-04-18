@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -32,12 +31,9 @@ func (pl *PlannerController) CreateMealPlan(ctx *gin.Context) {
 	var dietConditions []definitions.DietCondition
 
 	if userId, err = strconv.Atoi(ctx.Request.Header.Get("Userid")); err != nil {
-		fmt.Println(userId)
 		ctx.JSON(http.StatusNotAcceptable, gin.H{"message": err.Error()})
 		return
 	}
-
-	fmt.Println(userId)
 
 	u, err := pl.userService.GetUser(userId)
 
