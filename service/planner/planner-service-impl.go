@@ -22,6 +22,16 @@ func New(db *sql.DB, ctx context.Context) PlannerServiceImpl {
 	}
 }
 
+func (pS PlannerServiceImpl) GetDashBoard(userId int) ([]*models.Meal, error) {
+	meals, err := db.GetMealRecommendations(pS.database, int32(userId))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return meals, nil
+}
+
 func (pS PlannerServiceImpl) CreateMealPlan(uc *models.UserConstraints, conditions []definitions.DietCondition) (*models.Meal, error) {
 	var meal models.Meal
 	totalCalories := 0.0
