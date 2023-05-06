@@ -6,6 +6,6 @@ import (
 )
 
 type PlannerService interface {
-	CreateMealPlan(uc *models.UserConstraints, conditions []definitions.DietCondition) (*models.Meal, error)
+	CreateMealPlan(uc *models.UserConstraints, conditions []definitions.DietCondition, userId int) (*models.Meal, error)
 	GetDashBoard(userId int) ([]*models.Meal, error)
 }
