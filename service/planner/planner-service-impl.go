@@ -23,7 +23,7 @@ func New(db *sql.DB, ctx context.Context) PlannerServiceImpl {
 }
 
 func (pS PlannerServiceImpl) GetDashBoard(userId int) ([]*models.Meal, error) {
-	meals, err := db.GetMealRecommendations(pS.database, int32(userId))
+	meals, err := db.GetMealRecommendations(pS.database, userId)
 
 	if err != nil {
 		return nil, err
@@ -32,13 +32,17 @@ func (pS PlannerServiceImpl) GetDashBoard(userId int) ([]*models.Meal, error) {
 	return meals, nil
 }
 
-func (pS PlannerServiceImpl) CreateMealPlan(uc *models.UserConstraints, conditions []definitions.DietCondition) (*models.Meal, error) {
+func (pS PlannerServiceImpl) CreateMealPlan(uc *models.UserConstraints, conditions []definitions.DietCondition, userId int) (*models.Meal, error) {
 	var meal models.Meal
 	totalCalories := 0.0
 	totalCost := 0.0
 	totalProtein := 0.0
 
-	ings := nsga.Nsga(uc.Max, uc.Min, conditions)
+	ings, errAl := nsga.Nsga(uc.Max, uc.Min, conditions)
+
+	if errAl != nil {
+		return nil, errAl
+	}
 
 	for _, ing := range ings {
 		if ing.Type == "carbs" {
@@ -89,7 +93,7 @@ func (pS PlannerServiceImpl) CreateMealPlan(uc *models.UserConstraints, conditio
 	meal.ProteinValue = totalProtein
 
 	//Add meal plan to the recommendation table
-	err := db.AddRecommendation(pS.database, &meal)
+	err := db.AddRecommendation(pS.database, &meal, userId)
 
 	if err != nil {
 		return nil, err

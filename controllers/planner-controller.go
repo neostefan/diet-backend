@@ -81,7 +81,7 @@ func (pl *PlannerController) CreateMealPlan(ctx *gin.Context) {
 		return
 	}
 
-	meal, err := pl.plannerService.CreateMealPlan(userConstraints, dietConditions)
+	meal, err := pl.plannerService.CreateMealPlan(userConstraints, dietConditions, userId)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err})

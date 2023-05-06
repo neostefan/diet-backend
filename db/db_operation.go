@@ -135,16 +135,16 @@ func CreateRecommendationsTable(db *sql.DB) error {
 }
 
 // add diet recommendation
-func AddRecommendation(db *sql.DB, meal *models.Meal) error {
+func AddRecommendation(db *sql.DB, meal *models.Meal, userId int) error {
 	err := Error{}
-	stmt, errP := db.Prepare(`INSERT INTO recommendations(carbs, proteins, oils, vegetables, beverages, fruits) VALUES(?, ?, ?, ?, ?, ?)`)
+	stmt, errP := db.Prepare(`INSERT INTO recommendations(carbs, proteins, oils, vegetables, beverages, fruits, userId) VALUES(?, ?, ?, ?, ?, ?, ?)`)
 
 	if errP != nil {
 		err.errMsg = "unable to execute prepared recommendation query " + errP.Error()
 		return err
 	}
 
-	if _, errE := stmt.Exec(meal.Carbs, meal.Proteins, meal.Oils, meal.Vegetables, meal.Beverages, meal.Fruits); errE != nil {
+	if _, errE := stmt.Exec(meal.Carbs, meal.Proteins, meal.Oils, meal.Vegetables, meal.Beverages, meal.Fruits, userId); errE != nil {
 		err.errMsg = "unable to insert meal recommendation " + errE.Error()
 		return err
 	}
@@ -154,7 +154,7 @@ func AddRecommendation(db *sql.DB, meal *models.Meal) error {
 }
 
 // get the meals recommended earlier in the day
-func GetMealRecommendations(db *sql.DB, userId int32) ([]*models.Meal, error) {
+func GetMealRecommendations(db *sql.DB, userId int) ([]*models.Meal, error) {
 	meals := []*models.Meal{}
 	err := Error{}
 
@@ -174,11 +174,13 @@ func GetMealRecommendations(db *sql.DB, userId int32) ([]*models.Meal, error) {
 
 	for rows.Next() {
 		meal := models.Meal{}
-		errS := rows.Scan(&meal.Carbs, &meal.Proteins, &meal.Vegetables, &meal.Oils, &meal.Oils, &meal.Beverages, &meal.Fruits)
+		errS := rows.Scan(&meal.Carbs, &meal.Proteins, &meal.Vegetables, &meal.Oils, &meal.Beverages, &meal.Fruits)
 		if errS != nil {
 			err.errMsg = "error with reading recommendations: " + errS.Error()
 			return nil, err
 		}
+
+		meals = append(meals, &meal)
 	}
 
 	defer stmt.Close()
