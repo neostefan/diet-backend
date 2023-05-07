@@ -118,7 +118,7 @@ func GetUserById(db *sql.DB, id int) (models.User, error) {
 // creates the algorithm's diet recommendations table for a given day
 func CreateRecommendationsTable(db *sql.DB) error {
 	err := Error{}
-	stmt, errP := db.Prepare(`CREATE TABLE IF NOT EXISTS recommendations (id INTEGER PRIMARY KEY UNIQUE NOT NULL, carbs var(255), proteins var(255), oils var(255), vegetables var(255), beverages var(255), fruits VAR(255), userId INTEGER)`)
+	stmt, errP := db.Prepare(`CREATE TABLE IF NOT EXISTS recommendations (id INTEGER PRIMARY KEY UNIQUE NOT NULL, carbs var(255), proteins var(255), oils var(255), vegetables var(255), beverages var(255), fruits VAR(255), calories FLOAT, proteinValue FLOAT, cost FLOAT, userId INTEGER)`)
 
 	if errP != nil {
 		err.errMsg = "unable to create users table: " + errP.Error()
@@ -137,14 +137,14 @@ func CreateRecommendationsTable(db *sql.DB) error {
 // add diet recommendation
 func AddRecommendation(db *sql.DB, meal *models.Meal, userId int) error {
 	err := Error{}
-	stmt, errP := db.Prepare(`INSERT INTO recommendations(carbs, proteins, oils, vegetables, beverages, fruits, userId) VALUES(?, ?, ?, ?, ?, ?, ?)`)
+	stmt, errP := db.Prepare(`INSERT INTO recommendations(carbs, proteins, oils, vegetables, beverages, fruits, calories, proteinValue, cost, userId) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 
 	if errP != nil {
 		err.errMsg = "unable to execute prepared recommendation query " + errP.Error()
 		return err
 	}
 
-	if _, errE := stmt.Exec(meal.Carbs, meal.Proteins, meal.Oils, meal.Vegetables, meal.Beverages, meal.Fruits, userId); errE != nil {
+	if _, errE := stmt.Exec(meal.Carbs, meal.Proteins, meal.Oils, meal.Vegetables, meal.Beverages, meal.Fruits, meal.Calories, meal.ProteinValue, meal.Cost, userId); errE != nil {
 		err.errMsg = "unable to insert meal recommendation " + errE.Error()
 		return err
 	}
@@ -158,7 +158,7 @@ func GetMealRecommendations(db *sql.DB, userId int) ([]*models.Meal, error) {
 	meals := []*models.Meal{}
 	err := Error{}
 
-	stmt, errP := db.Prepare(`SELECT carbs, proteins, vegetables, oils, beverages, fruits FROM recommendations WHERE(userId = ?)`)
+	stmt, errP := db.Prepare(`SELECT carbs, proteins, vegetables, oils, beverages, fruits, calories, cost, proteinValue FROM recommendations WHERE(userId = ?) ORDER BY id DESC LIMIT 3`)
 
 	if errP != nil {
 		err.errMsg = "unable to prepare select recommendations query: " + errP.Error()
@@ -174,7 +174,7 @@ func GetMealRecommendations(db *sql.DB, userId int) ([]*models.Meal, error) {
 
 	for rows.Next() {
 		meal := models.Meal{}
-		errS := rows.Scan(&meal.Carbs, &meal.Proteins, &meal.Vegetables, &meal.Oils, &meal.Beverages, &meal.Fruits)
+		errS := rows.Scan(&meal.Carbs, &meal.Proteins, &meal.Vegetables, &meal.Oils, &meal.Beverages, &meal.Fruits, &meal.Calories, &meal.Cost, &meal.ProteinValue)
 		if errS != nil {
 			err.errMsg = "error with reading recommendations: " + errS.Error()
 			return nil, err
