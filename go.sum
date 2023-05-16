@@ -81,6 +81,10 @@ github.com/neostefan/ga-diet v1.0.8 h1:bLq7cIPoK01Tt+tvEePhjlwcEeqyMqVL9OndL5EZO
 github.com/neostefan/ga-diet v1.0.8/go.mod h1:Kl1Jkm/lI/anMYQF0L6wtQD7DgdAVfs+ksao+V7070Y=
 github.com/neostefan/ga-diet v1.0.9 h1:jfCpBRJTOHP8uweYiM2S5xqtA+wZfS84EBrgIhIt/D4=
 github.com/neostefan/ga-diet v1.0.9/go.mod h1:Kl1Jkm/lI/anMYQF0L6wtQD7DgdAVfs+ksao+V7070Y=
+github.com/neostefan/ga-diet v1.1.0 h1:hrugm7xzpscbvFqtLaN2GxPiLQ+P42hFb9t9zlTTGOQ=
+github.com/neostefan/ga-diet v1.1.0/go.mod h1:Kl1Jkm/lI/anMYQF0L6wtQD7DgdAVfs+ksao+V7070Y=
+github.com/neostefan/ga-diet v1.1.1 h1:YvuXNJAl4zLDaf6mXLitUaHrW+ZBzSlHICELnxvTM8s=
+github.com/neostefan/ga-diet v1.1.1/go.mod h1:Kl1Jkm/lI/anMYQF0L6wtQD7DgdAVfs+ksao+V7070Y=
 github.com/pelletier/go-toml/v2 v2.0.5 h1:ipoSadvV8oGUjnUbMub59IDPPwfxF694nG/jwbMiyQg=
 github.com/pelletier/go-toml/v2 v2.0.5/go.mod h1:OMHamSCAODeSsVrwwvcJOaoN0LIUIaFVNZzmWyNfXas=
 github.com/pelletier/go-toml/v2 v2.0.7 h1:muncTPStnKRos5dpVKULv2FVd4bMOhNePj9CjgDb8Us=
