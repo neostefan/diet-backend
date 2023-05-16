@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/mattn/go-sqlite3 v1.14.16
-	github.com/neostefan/ga-diet v1.0.9
+	github.com/neostefan/ga-diet v1.1.1
 )
 
 require (
